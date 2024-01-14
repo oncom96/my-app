@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  # Container untuk aplikasi Node.js
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+    networks:
+      - mynetwork
+
+  # Container untuk MongoDB
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: mydatabase
+    ports:
+      - "27017:27017"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
